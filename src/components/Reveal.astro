@@ -1,0 +1,51 @@
+---
+interface Props {
+  delay?: number;
+  class?: string;
+}
+const { delay = 0, class: cls = '' } = Astro.props;
+---
+
+<div class:list={['reveal', cls]} style={`--d:${delay}ms`}>
+  <slot />
+</div>
+
+<style is:global>
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.6s ease var(--d, 0ms),
+      transform 0.6s ease var(--d, 0ms);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  function initReveals() {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('in');
+            obs.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.12 },
+    );
+    document.querySelectorAll('.reveal:not(.in)').forEach((el) => obs.observe(el));
+  }
+  initReveals();
+  // Re-run after view-transition navigations.
+  document.addEventListener('astro:page-load', initReveals);
+</script>

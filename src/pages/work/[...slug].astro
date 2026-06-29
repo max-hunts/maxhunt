@@ -1,0 +1,325 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Reveal from '../../components/Reveal.astro';
+import Gallery from '../../components/Gallery.tsx';
+import FrameSequence from '../../components/FrameSequence.tsx';
+import { getCollection, render } from 'astro:content';
+import { optimize, resolveImage } from '../../lib/images';
+import { normalizeSkills } from '../../lib/skills';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  const sorted = projects.sort((a, b) => a.data.order - b.data.order);
+  return sorted.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: sorted[(i + 1) % sorted.length], index: i, total: sorted.length },
+  }));
+}
+
+const { project, next, index, total } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+
+const heroMeta = resolveImage(d.hero);
+const skills = normalizeSkills(d.skills);
+
+// Per-project social-card image. The `/images/*` frontmatter strings are NOT
+// public URLs (the files live in src/assets and are hashed at build), so we
+// optimize the hero to a real built asset for OG/Twitter. Falls back to /og.jpg.
+const ogImage = heroMeta
+  ? (await getImage({ src: heroMeta, format: 'jpeg', width: 1200, quality: 75 })).src
+  : '/og.jpg';
+
+// A small harmonious palette; each skill gets a stable colour from its name,
+// so the tag row reads as colourful (and the same skill keeps its colour).
+const SKILL_PALETTE = [
+  '#FF6B3D', // coral
+  '#2FC4D6', // teal
+  '#F5B544', // amber
+  '#A78BFA', // violet
+  '#4ADE80', // green
+  '#FF7DAE', // pink
+  '#5B9DFF', // blue
+];
+const skillColor = (name: string) => {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return SKILL_PALETTE[h % SKILL_PALETTE.length];
+};
+
+// Build optimized gallery shots (display / thumb / full) for the React island.
+const shots = await Promise.all(
+  d.gallery.map(async (g) => {
+    const meta = resolveImage(g.src);
+    const display = await optimize(g.src, 720);
+    const thumb = await optimize(g.src, 240);
+    const full = await optimize(g.src, 1600);
+    return {
+      src: display?.src ?? g.src,
+      srcset: display?.srcset ?? '',
+      thumb: thumb?.src ?? g.src,
+      full: full?.src ?? g.src,
+      ar: meta ? `${meta.width} / ${meta.height}` : '16 / 10',
+      caption: g.caption,
+    };
+  }),
+);
+
+const specs = [
+  ['YEAR', d.year],
+  ['ROLE', d.role],
+  ['DISCIPLINE', d.discipline],
+  ['TOOLS', d.tools],
+  ['COLLABORATORS', d.collaborators.length ? d.collaborators.join(', ') : undefined],
+  ['STATUS', d.status],
+].filter(([, v]) => v) as [string, string][];
+---
+
+<Base
+  title={`${d.title} — Max Hunt`}
+  description={d.tagline}
+  image={ogImage}
+  type="article"
+>
+  <main class="wrap">
+    <!-- top bar -->
+    <div class="flex justify-between items-center py-3 border-b border-line">
+      <a href="/" class="mono hover:text-accent transition-colors">← INDEX</a>
+      <span class="mono"
+        >PROJECT {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span
+      >
+    </div>
+
+    <!-- hero -->
+    <Reveal>
+      <header class="pt-10 pb-6">
+        <p class="mono text-accent">// {d.type} · {d.year}</p>
+        <h1 class="text-[clamp(40px,9vw,72px)] font-medium leading-[0.95] tracking-tight mt-2.5 m-0">
+          {d.title}
+        </h1>
+        <p class="text-[17px] text-ink-soft mt-3 max-w-[26em] leading-snug">{d.tagline}</p>
+        {
+          skills.length > 0 && (
+            <ul class="skills flex flex-wrap gap-2 mt-5 p-0 m-0 list-none">
+              {skills.map((s) => (
+                <li
+                  class="skill font-mono text-[11px] px-2.5 py-1.5 rounded-lg border"
+                  style={`--c: ${skillColor(s.name)}`}
+                >
+                  {s.name}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </header>
+    </Reveal>
+
+    {
+      d.sequence ? (
+        // Layout with a sticky scroll-driven render on the side.
+        <div data-seq-track class="grid grid-cols-1 md:grid-cols-2 gap-10 pt-2 pb-4">
+          <div class="md:sticky md:top-10 self-start space-y-7">
+            <FrameSequence
+              client:visible
+              dir={d.sequence.dir}
+              count={d.sequence.count}
+              pad={d.sequence.pad}
+              ext={d.sequence.ext}
+              ar="12 / 5"
+            />
+            <div>
+              {specs.map(([k, v]) => (
+                <div class="border-t border-line py-2.5">
+                  <div class="font-mono text-[10px] text-faint tracking-wide">{k}</div>
+                  <div class="text-[13px] text-ink mt-0.5">{v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <Reveal>
+              <div class="copy"><Content /></div>
+            </Reveal>
+            {shots.length > 0 && (
+              <Reveal delay={60}>
+                <h2 class="font-mono text-[13px] text-accent tracking-wide uppercase mt-10 mb-4">
+                  Gallery
+                </h2>
+                <Gallery client:visible shots={shots} />
+              </Reveal>
+            )}
+          </div>
+        </div>
+      ) : (
+        <>
+          {heroMeta && (
+            <Reveal delay={60}>
+              <div class={d.heroLight ? 'hero-fade' : ''}>
+                <Image
+                  src={heroMeta}
+                  alt={d.title}
+                  widths={[640, 1000, 1400]}
+                  sizes="(min-width: 1080px) 1000px, 100vw"
+                  format="webp"
+                  class={`w-full h-[clamp(220px,42vw,440px)] ${d.heroLight ? 'object-contain' : 'object-cover rounded-xl border border-white/[0.12]'}`}
+                />
+              </div>
+            </Reveal>
+          )}
+          <div class="grid grid-cols-1 md:grid-cols-[170px_1fr] gap-8 pt-10 pb-4">
+            <aside class="md:sticky md:top-3 self-start">
+              {specs.map(([k, v]) => (
+                <div class="border-t border-line py-2.5">
+                  <div class="font-mono text-[10px] text-faint tracking-wide">{k}</div>
+                  <div class="text-[13px] text-ink mt-0.5">{v}</div>
+                </div>
+              ))}
+            </aside>
+            <div>
+              <Reveal>
+                <div class="copy"><Content /></div>
+              </Reveal>
+              {shots.length > 0 && (
+                <Reveal delay={60}>
+                  <h2 class="font-mono text-[13px] text-accent tracking-wide uppercase mt-10 mb-4">
+                    Gallery
+                  </h2>
+                  <Gallery client:visible shots={shots} />
+                </Reveal>
+              )}
+            </div>
+          </div>
+        </>
+      )
+    }
+
+    <!-- next project -->
+    <a
+      href={`/work/${next.id}`}
+      class="group flex justify-between items-center border-t border-line mt-12 py-6 transition-[padding] hover:pr-2"
+    >
+      <div>
+        <span class="mono">NEXT PROJECT →</span>
+        <div class="text-2xl font-medium group-hover:text-accent transition-colors">
+          {next.data.title}
+        </div>
+      </div>
+      <span class="mono">{next.data.type}</span>
+    </a>
+  </main>
+</Base>
+
+<style is:global>
+  /* White-background product shots: radial-fade the image edges into the dark
+     page so the white reads as a soft spotlight instead of a hard box. */
+  .hero-fade {
+    position: relative;
+    border-radius: 12px;
+  }
+  .hero-fade img {
+    -webkit-mask: radial-gradient(120% 92% at 50% 42%, #000 50%, transparent 100%);
+    mask: radial-gradient(120% 92% at 50% 42%, #000 50%, transparent 100%);
+  }
+  .hero-fade::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: radial-gradient(120% 92% at 50% 42%, transparent 54%, var(--color-bg) 100%);
+  }
+
+  .copy h2 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-accent);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+  .copy p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+    margin: 0 0 18px;
+    max-width: 38em;
+  }
+  .copy blockquote {
+    border-left: 2px solid var(--color-accent);
+    padding-left: 16px;
+    margin: 0 0 18px;
+    color: var(--color-muted);
+    font-style: italic;
+  }
+  .copy p a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+  /* Inline CTA button (e.g. the hosted HostHunt landing link). */
+  .copy a.landing-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-accent);
+    text-decoration: none;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin: 2px 0 22px;
+    transition:
+      background 0.15s ease,
+      transform 0.15s ease;
+  }
+  .copy a.landing-cta:hover {
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    transform: translateY(-1px);
+  }
+
+  /* Skill pills — playful: staggered pop-in + lift/tilt + coral fill on hover. */
+  .skills .skill {
+    cursor: default;
+    transform-origin: center;
+    transition:
+      transform 0.16s ease,
+      background-color 0.16s ease,
+      color 0.16s ease,
+      border-color 0.16s ease;
+    animation: skill-pop 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+  }
+  /* Each pill carries its own colour via the inline --c custom property. */
+  .skills .skill {
+    color: var(--c, var(--color-accent));
+    border-color: color-mix(in srgb, var(--c, var(--color-accent)) 42%, transparent);
+  }
+  .skills .skill:hover {
+    transform: translateY(-3px) rotate(-3deg);
+    background: var(--c, var(--color-accent));
+    color: #0d0d0c;
+    border-color: var(--c, var(--color-accent));
+  }
+  .skills .skill:nth-child(1) { animation-delay: 0.02s; }
+  .skills .skill:nth-child(2) { animation-delay: 0.06s; }
+  .skills .skill:nth-child(3) { animation-delay: 0.1s; }
+  .skills .skill:nth-child(4) { animation-delay: 0.14s; }
+  .skills .skill:nth-child(5) { animation-delay: 0.18s; }
+  .skills .skill:nth-child(6) { animation-delay: 0.22s; }
+  .skills .skill:nth-child(7) { animation-delay: 0.26s; }
+  .skills .skill:nth-child(8) { animation-delay: 0.3s; }
+  @keyframes skill-pop {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>

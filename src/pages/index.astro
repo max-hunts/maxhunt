@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro';
+import Reveal from '../components/Reveal.astro';
+import ProjectIndex, { type ProjectCard } from '../components/ProjectIndex.tsx';
+import { getCollection } from 'astro:content';
+import { SITE } from '../consts';
+import { optimize, resolveImage } from '../lib/images';
+
+const entries = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const projects: ProjectCard[] = await Promise.all(
+  entries.map(async (p) => {
+    const heroOpt = await optimize(p.data.hero, 640);
+    const meta = resolveImage(p.data.hero);
+    return {
+      slug: p.id,
+      title: p.data.title,
+      tagline: p.data.tagline,
+      category: p.data.category,
+      type: p.data.type,
+      year: p.data.year,
+      isNew: p.data.isNew,
+      heroLight: p.data.heroLight,
+      hero: heroOpt ? { src: heroOpt.src, srcset: heroOpt.srcset } : null,
+      ar: meta ? `${meta.width} / ${meta.height}` : '16 / 10',
+    };
+  }),
+);
+---
+
+<Base>
+  <main class="wrap py-0">
+    <!-- top bar -->
+    <div class="flex justify-between items-center py-3 border-b border-line">
+      <span class="mono flex items-center gap-2.5">
+        <img
+          src="/logo.png"
+          alt="Max Hunt logo"
+          width="22"
+          height="20"
+          class="h-5 w-auto"
+        />
+        MAXHUNT.DESIGN
+      </span>
+      <a
+        href={`mailto:${SITE.email}`}
+        class="mono hover:text-accent transition-colors">CONTACT ME ↗</a
+      >
+    </div>
+
+    <!-- hero -->
+    <Reveal>
+      <section class="pt-10 pb-5">
+        <p class="mono mb-3">// SELECTED WORK — 2016–PRESENT</p>
+        <h1
+          class="text-[clamp(40px,8vw,64px)] font-medium leading-[0.98] tracking-tight m-0"
+        >
+          Max Hunt<span class="text-accent">.</span>
+        </h1>
+        <p class="text-[15px] text-muted mt-3.5 max-w-[34em] leading-relaxed">
+          Design &amp; product engineer turned <span class="text-ink"
+            >full-time software developer</span
+          > — building for the web, with an enduring love for designing physical products.
+        </p>
+        <div class="flex flex-wrap gap-2 mt-5">
+          <a
+            href={SITE.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group mono inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-accent text-accent-ink font-medium transition-transform hover:-translate-y-0.5"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"
+              ></path>
+            </svg>
+            LinkedIn
+            <span class="transition-transform group-hover:translate-x-0.5">↗</span>
+          </a>
+          <a
+            href="/Maxim_Hunt_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mono px-4 py-2.5 rounded-lg border border-white/20 hover:border-accent hover:text-accent transition-colors"
+            >resume ↗</a
+          >
+          <a
+            href={`mailto:${SITE.email}`}
+            class="mono px-4 py-2.5 rounded-lg border border-white/20 hover:border-accent hover:text-accent transition-colors"
+            >contact</a
+          >
+        </div>
+      </section>
+    </Reveal>
+
+    <!-- index island -->
+    <Reveal delay={80}>
+      <ProjectIndex client:load projects={projects} />
+    </Reveal>
+
+    <!-- footer -->
+    <footer class="border-t border-line mt-16 py-8 flex flex-wrap gap-4 justify-between items-center">
+      <span class="mono">© 2026 MAX HUNT</span>
+      <span class="mono">
+        <span class="text-faint">[</span>
+        <span class="text-ink">HARDWARE</span>
+        <span class="text-faint">|</span>
+        <span class="text-ink">MECHATRONICS</span>
+        <span class="text-faint">|</span>
+        <span class="text-ink">SOFTWARE</span>
+        <span class="text-faint">]</span>
+        <span class="text-accent">DEV</span>
+      </span>
+    </footer>
+  </main>
+</Base>

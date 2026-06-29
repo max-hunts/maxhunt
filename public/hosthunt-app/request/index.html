@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>HostHunt — Post a request</title>
+    <link rel="icon" href="/hosthunt-app/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/hosthunt-app/app.css" />
+  </head>
+  <body>
+    <div class="demo">
+      Concept demo — sample data, no live backend ·
+      <a href="/hosthunt-app/">landing</a> ·
+      <a href="https://maxhunt.design/work/hosthunt">case study →</a>
+    </div>
+
+    <header class="appbar">
+      <div class="wrap appbar-inner">
+        <a class="brand" href="/hosthunt-app/" aria-label="HostHunt"><span class="ink">h</span><span class="o"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#e85626"/><path fill="#fff" d="M12 6.4 17.6 11 V17.4 H13.8 V13.6 H10.2 V17.4 H6.4 V11 Z"/></svg></span><span class="ink">st</span><span class="coral">hunt</span></a>
+        <nav class="app-nav">
+          <a href="/hosthunt-app/account/">Dashboard</a>
+          <a href="/hosthunt-app/request/" class="active">Trips</a>
+          <a href="#">History</a>
+        </nav>
+        <div class="app-right">
+          <div class="avatar-pill"><span class="avatar">A</span>Amelia</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap page">
+      <div class="page-head">
+        <div>
+          <h1>Post a request</h1>
+          <p class="sub">Say what you need — hosts come to you with offers.</p>
+        </div>
+        <a class="btn btn-ghost" href="/hosthunt-app/account/">← Back</a>
+      </div>
+
+      <form class="form" onsubmit="return false">
+        <div class="field">
+          <label>Where to?</label>
+          <input type="text" placeholder="City, area or 'flexible'" value="London, UK" />
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>Check-in</label>
+            <input type="date" />
+          </div>
+          <div class="field">
+            <label>Check-out</label>
+            <input type="date" />
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>Guests</label>
+            <input type="number" value="2" min="1" />
+          </div>
+          <div class="field">
+            <label>Budget (total)</label>
+            <input type="text" placeholder="£720" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Property type</label>
+          <select>
+            <option>Any</option>
+            <option>Entire place</option>
+            <option>Private room</option>
+            <option>Studio</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Must-haves</label>
+          <div class="chips" data-chips>
+            <span class="chip on">Near transport</span>
+            <span class="chip on">Quiet</span>
+            <span class="chip">Fast wifi</span>
+            <span class="chip">Workspace</span>
+            <span class="chip">Parking</span>
+            <span class="chip">Self check-in</span>
+            <span class="chip">Step-free</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Anything else for hosts?</label>
+          <textarea placeholder="Tell hosts about your trip so they can tailor an offer…"></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-solid">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="m5 12 5 5L20 7"/></svg>
+            Post request — let hosts compete
+          </button>
+        </div>
+      </form>
+      <p class="footnote">Front-end concept — nothing is submitted.</p>
+    </main>
+
+    <script>
+      document.querySelectorAll("[data-chips] .chip").forEach((c) =>
+        c.addEventListener("click", () => c.classList.toggle("on")),
+      );
+    </script>
+  </body>
+</html>

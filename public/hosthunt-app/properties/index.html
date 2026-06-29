@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>HostHunt — Your properties</title>
+    <link rel="icon" href="/hosthunt-app/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/hosthunt-app/app.css" />
+  </head>
+  <body>
+    <div class="demo">
+      Concept demo — sample data, no live backend ·
+      <a href="/hosthunt-app/">landing</a> ·
+      <a href="https://maxhunt.design/work/hosthunt">case study →</a>
+    </div>
+
+    <header class="appbar">
+      <div class="wrap appbar-inner">
+        <a class="brand" href="/hosthunt-app/" aria-label="HostHunt"><span class="ink">h</span><span class="o"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#e85626"/><path fill="#fff" d="M12 6.4 17.6 11 V17.4 H13.8 V13.6 H10.2 V17.4 H6.4 V11 Z"/></svg></span><span class="ink">st</span><span class="coral">hunt</span></a>
+        <nav class="app-nav">
+          <a href="/hosthunt-app/dashboard/">Dashboard</a>
+          <a href="/hosthunt-app/properties/" class="active">Properties</a>
+          <a href="#">Analysis</a>
+          <a href="#">History</a>
+        </nav>
+        <div class="app-right">
+          <button class="icon-btn" aria-label="Notifications" title="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          </button>
+          <button class="icon-btn" aria-label="Settings" title="Settings">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+          <div class="avatar-pill"><span class="avatar">E</span>Eleanor</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap page">
+      <div class="page-head">
+        <div>
+          <h1>Your properties</h1>
+          <p class="sub">3 listings · 2 live, 1 in review</p>
+        </div>
+        <a class="btn btn-solid" href="/hosthunt-app/properties/add/">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Add property
+        </a>
+      </div>
+
+      <div class="cards-grid">
+        <article class="pcard">
+          <div class="ph" style="background-image:url('/hosthunt-app/img/prop1.jpg')"></div>
+          <div class="body">
+            <span class="badge">Live</span>
+            <h3>The Old Bell</h3>
+            <p class="loc">Shoreditch, London · 2 bed · sleeps 4</p>
+            <div class="row"><span class="price">£128 <span>/ night</span></span><span class="loc">★ 4.9 (37)</span></div>
+          </div>
+        </article>
+        <article class="pcard">
+          <div class="ph" style="background-image:url('/hosthunt-app/img/prop3.jpg')"></div>
+          <div class="body">
+            <span class="badge">Live</span>
+            <h3>Canalside Loft</h3>
+            <p class="loc">Hackney, London · 1 bed · sleeps 2</p>
+            <div class="row"><span class="price">£95 <span>/ night</span></span><span class="loc">★ 4.8 (21)</span></div>
+          </div>
+        </article>
+        <article class="pcard">
+          <div class="ph" style="background-image:url('/hosthunt-app/img/prop2.jpg')"></div>
+          <div class="body">
+            <span class="badge warn">In review</span>
+            <h3>Corner Townhouse</h3>
+            <p class="loc">Islington, London · 3 bed · sleeps 6</p>
+            <div class="row"><span class="price">£210 <span>/ night</span></span><span class="loc">awaiting docs</span></div>
+          </div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

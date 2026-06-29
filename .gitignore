@@ -29,3 +29,12 @@ Temporary Items
 .apdisk
 Icon[
 ]
+
+# ---> Node / Astro
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+.env
+.env.production
