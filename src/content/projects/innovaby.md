@@ -21,6 +21,7 @@ tools: Raspberry Pi CM4, Python, AWS, Telegram, WebRTC
 collaborators: []
 status: MVP / prototype
 hero: "/images/innovaby-sleepsafe.png"
+heroContain: true
 gallery:
   - src: "/images/innovaby-sleepsafe.png"
     caption: "SleepSafe — the smart-crib feature set"

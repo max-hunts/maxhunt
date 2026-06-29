@@ -36,6 +36,10 @@ const projects = defineCollection({
     // hero + index preview then get a radial fade so the white blends into the
     // dark theme instead of reading as a hard white box.
     heroLight: z.boolean().default(false),
+    // True for a dark, full-bleed graphic (e.g. a designed feature grid) that
+    // must be shown WHOLE — renders at natural aspect (no crop) with no white
+    // fade. Use instead of heroLight when the image is already dark-themed.
+    heroContain: z.boolean().default(false),
     gallery: z
       .array(z.object({ src: z.string(), caption: z.string().optional() }))
       .default([]),

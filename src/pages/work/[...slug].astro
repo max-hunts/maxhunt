@@ -163,7 +163,13 @@ const specs = [
                   widths={[640, 1000, 1400]}
                   sizes="(min-width: 1080px) 1000px, 100vw"
                   format="webp"
-                  class={`w-full h-[clamp(220px,42vw,440px)] ${d.heroLight ? 'object-contain' : 'object-cover rounded-xl border border-white/[0.12]'}`}
+                  class={
+                    d.heroLight
+                      ? 'w-full h-[clamp(220px,42vw,440px)] object-contain'
+                      : d.heroContain
+                        ? 'w-full h-auto rounded-xl'
+                        : 'w-full h-[clamp(220px,42vw,440px)] object-cover rounded-xl border border-white/[0.12]'
+                  }
                 />
               </div>
             </Reveal>
@@ -260,26 +266,40 @@ const specs = [
     text-underline-offset: 2px;
     text-decoration-thickness: 1px;
   }
-  /* Inline CTA button (e.g. the hosted HostHunt landing link). */
+  /* Inline CTA button (e.g. the hosted HostHunt landing link). Filled coral
+     with a soft glow so it clearly reads as the primary action on the page. */
   .copy a.landing-cta {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--color-accent);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--color-accent-ink);
+    background: var(--color-accent);
     text-decoration: none;
-    border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
-    border-radius: 10px;
-    padding: 10px 16px;
-    margin: 2px 0 22px;
+    border: 1px solid var(--color-accent);
+    border-radius: 12px;
+    padding: 13px 22px;
+    margin: 6px 0 24px;
+    box-shadow: 0 6px 22px -8px color-mix(in srgb, var(--color-accent) 70%, transparent);
     transition:
       background 0.15s ease,
-      transform 0.15s ease;
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
   }
   .copy a.landing-cta:hover {
-    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--color-accent) 90%, white);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px -8px color-mix(in srgb, var(--color-accent) 80%, transparent);
+  }
+  .copy a.landing-cta .cta-arrow {
+    display: inline-block;
+    transition: transform 0.15s ease;
+  }
+  .copy a.landing-cta:hover .cta-arrow {
+    transform: translate(2px, -2px);
   }
 
   /* Skill pills — playful: staggered pop-in + lift/tilt + coral fill on hover. */

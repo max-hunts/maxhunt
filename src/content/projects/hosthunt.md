@@ -39,7 +39,7 @@ for travellers, warmer leads for hosts.
 
 I built and hosted the marketing landing here — front-end only, no live backend.
 
-<a class="landing-cta" href="/hosthunt-app/" target="_blank" rel="noopener noreferrer">↗ Open the HostHunt landing</a>
+<a class="landing-cta" href="/hosthunt-app/" target="_blank" rel="noopener noreferrer">Explore the live HostHunt demo <span class="cta-arrow">↗</span></a>
 
 ## What I built
 
