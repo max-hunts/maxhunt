@@ -20,8 +20,10 @@ skills:
 tools: Raspberry Pi CM4, Python, AWS, Telegram, WebRTC
 collaborators: []
 status: MVP / prototype
-hero: "/images/innovaby-system.png"
+hero: "/images/innovaby-sleepsafe.png"
 gallery:
+  - src: "/images/innovaby-sleepsafe.png"
+    caption: "SleepSafe — the smart-crib feature set"
   - src: "/images/innovaby-system.png"
     caption: "System architecture — Pi-powered crib, AWS coordinator, parent + nanny clients"
 featured: true
