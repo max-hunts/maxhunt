@@ -69,6 +69,11 @@ const { key, host, uiHost } = ANALYTICS;
           capture_pageview: false, // we fire $pageview manually (see below)
           capture_pageleave: true, // tab-close / unload leaves
           capture_performance: { web_vitals: true }, // Core Web Vitals (LCP/INP/CLS)
+          // A portfolio doesn't need session replay or in-app surveys — turning
+          // them off stops posthog-recorder.js + surveys.js from loading (~50KB
+          // of JS + its eval). Flip either to false to re-enable.
+          disable_session_recording: true,
+          disable_surveys: true,
           persistence: 'localStorage+cookie',
         });
 
