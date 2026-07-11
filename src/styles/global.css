@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Self-hosted fonts (latin subset, weights 400/500) — served same-origin and
+   hashed by the build, so no render-blocking request to fonts.googleapis.com and
+   no third-party connection. Family names ("Inter" / "JetBrains Mono") match the
+   --font-* tokens below. `display=swap` behaviour is baked into these @font-face. */
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";
+
 @theme {
   --color-bg: #0d0d0c;
   --color-surface: #161614;

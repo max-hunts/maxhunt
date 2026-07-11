@@ -17,5 +17,12 @@ export const SITE = {
 // (the <Analytics> component then renders nothing). Region: US vs EU cloud.
 export const ANALYTICS = {
   key: 'phc_kXWJWRraWsoKEAXTtaM86wmSqNx5HgN5KRQuM4N2RKJi',
-  host: 'https://eu.i.posthog.com', // US users: 'https://us.i.posthog.com'
+  // First-party proxy: a Cloudflare Worker on e.maxhunt.design relays to PostHog
+  // EU (eu.i.posthog.com ingestion + eu-assets for /static/*). Routing analytics
+  // through our own domain dodges ad-blockers (their lists target *.posthog.com)
+  // and removes the third-party connection. The snippet derives the assets URL
+  // from this host, so pointing api_host here proxies both the script and events.
+  host: 'https://e.maxhunt.design',
+  // Where PostHog's own UI lives (toolbar/links) — the proxy only carries data.
+  uiHost: 'https://eu.posthog.com',
 } as const;

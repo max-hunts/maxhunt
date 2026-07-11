@@ -10,14 +10,14 @@
 // wiring → "interaction levels" for free. Geo (country/region/city) + IP are
 // enriched server-side by PostHog on ingest; known bots are filtered there.
 import { ANALYTICS } from '../consts';
-const { key, host } = ANALYTICS;
+const { key, host, uiHost } = ANALYTICS;
 ---
 
 {
   key && (
     <>
       <link rel="preconnect" href={host} crossorigin />
-      <script is:inline define:vars={{ key, host }}>
+      <script is:inline define:vars={{ key, host, uiHost }}>
         !(function (t, e) {
           var o, n, p, r;
           e.__SV ||
@@ -64,7 +64,8 @@ const { key, host } = ANALYTICS;
         })(document, window.posthog || []);
 
         window.posthog.init(key, {
-          api_host: host,
+          api_host: host, // first-party Cloudflare proxy (see src/consts.ts)
+          ui_host: uiHost, // PostHog's own UI origin (toolbar/links resolve here)
           capture_pageview: false, // we fire $pageview manually (see below)
           capture_pageleave: true, // tab-close / unload leaves
           capture_performance: { web_vitals: true }, // Core Web Vitals (LCP/INP/CLS)
