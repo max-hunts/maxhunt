@@ -2,9 +2,10 @@ import { useMemo, useRef, useState } from 'react';
 
 export type ProjectCard = {
   slug: string;
+  href: string;
   title: string;
   tagline: string;
-  category: 'software' | 'product' | 'engineering';
+  category: 'software' | 'product' | 'engineering' | 'private';
   type: string;
   year: string;
   isNew: boolean;
@@ -17,7 +18,7 @@ export type ProjectCard = {
   ar: string;
 };
 
-type Filter = 'all' | ProjectCard['category'];
+type Filter = 'all' | Exclude<ProjectCard['category'], 'private'>;
 
 const FILTERS: Filter[] = ['all', 'software', 'product', 'engineering'];
 
@@ -25,7 +26,18 @@ const placeholderTint: Record<ProjectCard['category'], string> = {
   software: '#3a1d14',
   product: '#142a35',
   engineering: '#16271f',
+  private: '#201b19',
 };
+
+function LockIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="4" y="10" width="16" height="11" rx="2" />
+      <path d="M8 10V6a4 4 0 0 1 8 0v4" />
+      <path d="M12 14v3" />
+    </svg>
+  );
+}
 
 export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) {
   const [filter, setFilter] = useState<Filter>('all');
@@ -34,7 +46,7 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
     [filter, projects],
   );
   const [activeSlug, setActiveSlug] = useState<string>(projects[0]?.slug);
-  const active = projects.find((p) => p.slug === activeSlug) ?? projects[0];
+  const active = visible.find((p) => p.slug === activeSlug) ?? visible[0];
 
   // Debounce hover-driven preview swaps: dragging the cursor across the list
   // shouldn't fire a swap per row — only settle on the one you pause over.
@@ -81,7 +93,7 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
           {visible.map((p, i) => (
             <a
               key={p.slug}
-              href={`/work/${p.slug}`}
+              href={p.href}
               onMouseEnter={() => previewHover(p.slug)}
               onFocus={() => setActiveSlug(p.slug)}
               className={
@@ -92,7 +104,11 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
               }
             >
               <span className="font-mono text-xs text-faint group-hover:text-accent transition-colors">
-                {String(i + 1).padStart(2, '0')}
+                {p.category === 'private' ? (
+                  <LockIcon className="h-4 w-4 text-accent" />
+                ) : (
+                  String(i + (visible[0]?.category === 'private' ? 0 : 1)).padStart(2, '0')
+                )}
               </span>
               <div>
                 <p className="text-[17px] font-medium flex items-center gap-2 m-0">
@@ -128,7 +144,24 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
         >
           {projects.map((p) => {
             const on = p.slug === active?.slug;
-            return p.hero ? (
+            return p.category === 'private' ? (
+              <div
+                key={p.slug}
+                aria-hidden="true"
+                className="absolute inset-0 flex flex-col items-center justify-center gap-5 transition-opacity duration-[220ms] ease-out"
+                style={{
+                  opacity: on ? 1 : 0,
+                  background: 'radial-gradient(ellipse at 50% 40%, rgba(255,107,61,0.10), transparent 75%)',
+                }}
+              >
+                <div className="flex h-24 w-24 items-center justify-center rounded-[22px] border border-accent/25 bg-accent/5">
+                  <LockIcon className="h-12 w-12 text-accent" />
+                </div>
+                <span className="font-mono text-[10px] tracking-[0.15em] text-muted">
+                  PASSWORD PROTECTED
+                </span>
+              </div>
+            ) : p.hero ? (
               <img
                 key={p.slug}
                 src={p.hero.src}
@@ -169,10 +202,10 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
           {active?.tagline}
         </p>
         <a
-          href={`/work/${active?.slug}`}
+          href={active?.href}
           className="inline-block font-mono text-[11px] px-3 py-2 rounded-lg bg-accent text-accent-ink mt-3"
         >
-          open case study →
+          {active?.category === 'private' ? 'view private work →' : 'open case study →'}
         </a>
       </div>
     </div>

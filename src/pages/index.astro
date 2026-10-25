@@ -16,6 +16,7 @@ const projects: ProjectCard[] = await Promise.all(
     const meta = resolveImage(p.data.hero);
     return {
       slug: p.id,
+      href: `/work/${p.id}`,
       title: p.data.title,
       tagline: p.data.tagline,
       category: p.data.category,
@@ -28,6 +29,21 @@ const projects: ProjectCard[] = await Promise.all(
     };
   }),
 );
+
+// The public index links to the protected collection; its records stay private.
+projects.unshift({
+  slug: 'private-work',
+  href: SITE.privateWork,
+  title: 'Private work',
+  tagline: 'Four project records. Password required.',
+  category: 'private',
+  type: 'PRIVATE',
+  year: '',
+  isNew: false,
+  heroLight: false,
+  hero: null,
+  ar: '16 / 10',
+});
 ---
 
 <Base>
@@ -90,27 +106,6 @@ const projects: ProjectCard[] = await Promise.all(
             class="mono px-4 py-2.5 rounded-lg border border-white/20 hover:border-accent hover:text-accent transition-colors"
             >contact</a
           >
-          <a
-            href={SITE.privateWork}
-            aria-label="Private work (password required)"
-            class="mono inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-white/20 hover:border-accent hover:text-accent transition-colors"
-          >
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="4" y="10" width="16" height="11" rx="2"></rect>
-              <path d="M8 10V6a4 4 0 0 1 8 0v4"></path>
-            </svg>
-            private work
-          </a>
         </div>
       </section>
     </Reveal>
