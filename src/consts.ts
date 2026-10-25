@@ -2,6 +2,7 @@
 export const SITE = {
   name: 'Max Hunt',
   domain: 'https://maxhunt.design',
+  privateWork: 'https://private.maxhunt.design',
   title: 'Max Hunt — Design Engineer & Software Developer',
   description:
     'Design & product engineer turned full-time software developer, with an enduring love for designing physical products. Selected work spanning hardware, mechatronics, and software — 2016 to present.',
