@@ -1,2 +1,2 @@
-# maxhunt.design
+# maxhunt.dev
 

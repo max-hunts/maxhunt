@@ -1,6 +1,6 @@
-# maxhunt.design — Portfolio Site
+# maxhunt.dev — Portfolio Site
 
-Personal portfolio for **Max Hunt** — design & product engineer turned full-time software developer. Lives at `maxhunt.design`, hosted free on **GitHub Pages** (repo: `git@github.com:max-hunts/maxhunt.git`, branch `master`). Display/brand name is **Max** (set in `src/consts.ts` `SITE.name`); the résumé file is still `public/Maxim_Hunt_Resume.pdf` (the formal document keeps the full name).
+Personal portfolio for **Max Hunt** — design & product engineer turned full-time software developer. Lives at `maxhunt.dev` (maxhunt.design and maxhunt.engineer redirect to it), hosted free on **GitHub Pages** (repo: `git@github.com:max-hunts/maxhunt.git`, branch `master`). Display/brand name is **Max** (set in `src/consts.ts` `SITE.name`); the résumé file is still `public/Maxim_Hunt_Resume.pdf` (the formal document keeps the full name).
 
 ## Stack
 
@@ -77,7 +77,7 @@ public/
   guibe-sq/                   # 200-frame render sequence for the guibe page (0001..0200.jpg)
   shiba/                      # Shiba sprite frames (dog-*.png, heart, bone)
   logo.png  og.jpg            # on-page logo + social card image (static, unprocessed)
-  CNAME                        # maxhunt.design (REQUIRED — keep, or custom domain breaks)
+  CNAME                        # maxhunt.dev (REQUIRED — keep, or custom domain breaks)
   Maxim_Hunt_Resume.pdf, favicons
 .github/workflows/deploy.yml  # build + deploy to GitHub Pages on push to master
 .Codex/launch.json           # dev-server config for the preview tooling
@@ -123,7 +123,7 @@ The previous site is archived for reference (not served, not built):
 - Note: legacy HTML image refs are broken in the archive because `Images/` moved to `public/images/`; git history has the working version.
 
 ## Conventions / gotchas
-- Keep `public/CNAME` = `maxhunt.design`.
+- Keep `public/CNAME` = `maxhunt.dev`.
 - Content frontmatter still references images as `/images/foo.jpg` strings, but those files now live in `src/assets/images/` — `src/lib/images.ts` maps the string back to the imported asset. If you add a project image, drop it in `src/assets/images/` (NOT `public/images`, which no longer exists).
 - The guibe scroll/drag frame-sequence is implemented (`FrameSequence.tsx` + `sequence` frontmatter on `guibe.md`, frames in `public/guibe-sq/`). Reuse it on any project by adding a `sequence` block.
 - `Shiba.tsx` is gated to pointer (`hover: hover`) devices with motion allowed — it won't render on touch or under `prefers-reduced-motion` (so it's invisible in the preview tool, which emulates reduced-motion).

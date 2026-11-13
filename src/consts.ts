@@ -1,7 +1,7 @@
 // Central site config — used for SEO meta, structured data, and CTAs.
 export const SITE = {
   name: 'Max Hunt',
-  domain: 'https://maxhunt.design',
+  domain: 'https://maxhunt.dev',
   privateWork: 'https://private.maxhunt.design',
   title: 'Max Hunt — Design Engineer & Software Developer',
   description:

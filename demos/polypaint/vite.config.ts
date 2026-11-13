@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 // The demo is committed as a build output under the site's public/ folder
 // (like public/hosthunt-app and public/polymarket-lab), so GitHub Pages serves
-// it at https://maxhunt.design/polypaint-demo/ without building it in CI.
+// it at https://maxhunt.dev/polypaint-demo/ without building it in CI.
 // Override the base with POLYPAINT_BASE if it ever moves (e.g. '/' on its own domain).
 export default defineConfig({
   base: process.env.POLYPAINT_BASE ?? '/polypaint-demo/',

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://maxhunt.design/sitemap-index.xml
+Sitemap: https://maxhunt.dev/sitemap-index.xml
