@@ -13,9 +13,6 @@ heroLight: true
 gallery:
   - { src: /images/wx-2.jpg }
   - { src: /images/wx-3.jpg }
-  - { src: /images/mk-1.jpg }
-  - { src: /images/mk-2.jpg }
-  - { src: /images/mk-3.jpg }
 order: 80
 ---
 
