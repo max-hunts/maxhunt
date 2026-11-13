@@ -23,6 +23,14 @@ status: Research concluded Aug 2026 — archived with full write-up
 hero: "/images/pm-ui-hero.png"
 heroContain: true
 gallery:
+  - src: "/images/pm-dash-books.png"
+    caption: "The dashboard mid-run: one card per active paper book, ranked by score (real UI, illustrative data)"
+  - src: "/images/pm-dash-book.png"
+    caption: "A single book's page: equity curve, return projections and trade stats (real UI, illustrative data)"
+  - src: "/images/pm-dash-trades.png"
+    caption: "Open positions and the trade log, with execution style and fees on every fill (real UI, illustrative data)"
+  - src: "/images/pm-dash-experiments.png"
+    caption: "The experiments table: every book the lab ran, from launch to retirement (real UI, illustrative data)"
   - src: "/images/pm-ui-architecture.png"
     caption: "The full system on one home server — orders exit through a separate VPN stack, everything else stays local"
   - src: "/images/pm-ui-thesis.png"
@@ -55,8 +63,9 @@ Streams carried events between workers.
 
 On top ran a fleet of **26 paper-trading books**, many side by side as A/B arms — mean-reversion
 fades, favourite carry, whale-copy, news and LLM signals — all from one
-container image configured per book. A FastAPI + React dashboard (with the
-public About page shown here) tracked each book's equity, positions and trades;
+container image configured per book. A FastAPI + React dashboard tracked each book's equity, positions and trades
+(the dashboard shots here run the real UI on sample data, since the lab's
+database is archived offline);
 a Telegram bot sent digests, fills and kill-line alerts.
 
 The whole thing ran in Docker Compose on a 4-core LattePanda in a closet, with
