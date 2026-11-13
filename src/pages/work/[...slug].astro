@@ -318,6 +318,17 @@ const specs = [
     transform: translateY(-2px);
     box-shadow: 0 12px 30px -8px color-mix(in srgb, var(--color-accent) 80%, transparent);
   }
+  .copy .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 6px 0 24px; }
+  .copy .cta-row a.landing-cta { margin: 0; }
+  .copy a.landing-cta.secondary {
+    color: var(--color-accent);
+    background: transparent;
+    box-shadow: none;
+  }
+  .copy a.landing-cta.secondary:hover {
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    box-shadow: none;
+  }
   .copy a.landing-cta .cta-arrow {
     display: inline-block;
     transition: transform 0.15s ease;

@@ -19,6 +19,13 @@ tools: Swift, UIKit, AVKit, Core Data, Xcode
 status: Open source — runs on Apple TV and iPhone
 hero: "/images/ororo-hero.jpg"
 heroContain: true
+gallery:
+  - src: "/images/ororo-site-hero.png"
+    caption: "The project site, with the app's Top Shelf banner as it appears on the Apple TV home screen"
+  - src: "/images/ororo-site-features.png"
+    caption: "What it does: browse, search, subtitles, resume, favourites, a quality picker and Keychain sign-in"
+  - src: "/images/ororo-site-faq.png"
+    caption: "Install guide and FAQ for people building it onto their own Apple TV"
 featured: false
 isNew: true
 order: 15
@@ -30,7 +37,10 @@ abandoned in 2019. When I picked it up, it didn't work: it wouldn't build, it
 couldn't sign anyone in, and the parts that did run fell over on real hardware.
 I took it from there to an app that feels at home on the living-room TV.
 
-<a class="landing-cta" href="https://github.com/max-hunts/ororo-player-tvos" target="_blank" rel="noopener noreferrer">View Ororo Player on GitHub <span class="cta-arrow">↗</span></a>
+<div class="cta-row">
+<a class="landing-cta" href="https://max-hunts.github.io/ororo-player-tvos/" target="_blank" rel="noopener noreferrer">Visit the project site <span class="cta-arrow">↗</span></a>
+<a class="landing-cta secondary" href="https://github.com/max-hunts/ororo-player-tvos" target="_blank" rel="noopener noreferrer">View Ororo Player on GitHub <span class="cta-arrow">↗</span></a>
+</div>
 
 ## Where it started
 
