@@ -16,7 +16,7 @@ skills:
   - Xcode toolchains
   - { name: UI design, kind: biz }
 tools: Swift, UIKit, AVKit, Core Data, Xcode
-status: Personal build — runs on Apple TV and iPhone
+status: Open source — runs on Apple TV and iPhone
 hero: "/images/ororo-hero.jpg"
 heroContain: true
 featured: false
@@ -29,6 +29,8 @@ unofficial open-source iOS and tvOS client for it had been written in 2018 and
 abandoned in 2019. When I picked it up, it didn't work: it wouldn't build, it
 couldn't sign anyone in, and the parts that did run fell over on real hardware.
 I took it from there to an app that feels at home on the living-room TV.
+
+<a class="landing-cta" href="https://github.com/max-hunts/ororo-player-tvos" target="_blank" rel="noopener noreferrer">View Ororo Player on GitHub <span class="cta-arrow">↗</span></a>
 
 ## Where it started
 
