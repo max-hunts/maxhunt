@@ -26,8 +26,7 @@ gallery:
   - src: "/images/hosthunt-howitworks.png"
     caption: "The reverse-bid flow, in three steps"
 featured: true
-isNew: true
-order: 10
+order: 15
 ---
 
 HostHunt flips the rental marketplace on its head. Instead of guests trawling

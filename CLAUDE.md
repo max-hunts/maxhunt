@@ -95,7 +95,7 @@ Frontmatter fields: `title, tagline, category (software|product|engineering), ty
 
 - `skills[]` renders as **animated pills on the case-study page only** (`.skills .skill` in `work/[...slug].astro`): staggered pop-in + hover lift/tilt/fill. NOT shown on the index. Each pill gets a **stable colour from a 7-colour palette** (hashed from the skill name → `--c` inline var; `skillColor()` in the page frontmatter), so the row is multicoloured. Entries are a string or `{ name, kind: 'biz' }` (the `kind` carries semantic meaning but no longer drives colour; normalized by `src/lib/skills.ts`). Founder projects (hosthunt, innovaby) carry real non-tech skills — market research, GTM strategy, marketing, etc.
 
-Current projects: `hosthunt` + `innovaby` (NEW — real content written from the source repos), plus migrated legacy: `power, gizmo, clean, wirelexx` (`fea` and `sportable` were removed from the site in Nov 2026). `order` controls index sorting.
+Current projects: `hosthunt` + `innovaby` (real content written from the source repos; their `isNew` tag was dropped in Nov 2026), plus migrated legacy: `power, gizmo, clean, wirelexx` (`fea` and `sportable` were removed from the site in Nov 2026). `order` controls index sorting.
 
 - **PolyPaint** (slug `/work/polypaint`, `order: 13`, type `WEB3`, year 2022): the 2022 million-pixel NFT canvas, with a 2026 client-side demo (see "Hosted PolyPaint demo" below). Hero and gallery are real captures of the demo (`src/assets/images/polypaint-*.png`, all 2880x1800); captions say the chain is simulated and the art is seeded.
 

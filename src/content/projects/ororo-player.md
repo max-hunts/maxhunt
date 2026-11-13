@@ -28,7 +28,7 @@ gallery:
     caption: "Install guide and FAQ for people building it onto their own Apple TV"
 featured: false
 isNew: true
-order: 15
+order: 10
 ---
 
 [Ororo.tv](https://ororo.tv) streams films and series with subtitles. An

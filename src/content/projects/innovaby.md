@@ -28,7 +28,6 @@ gallery:
   - src: "/images/innovaby-system.png"
     caption: "System architecture — Pi-powered crib, AWS coordinator, parent + nanny clients"
 featured: true
-isNew: true
 order: 20
 ---
 
