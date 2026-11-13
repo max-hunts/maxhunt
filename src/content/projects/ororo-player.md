@@ -38,8 +38,8 @@ couldn't sign anyone in, and the parts that did run fell over on real hardware.
 I took it from there to an app that feels at home on the living-room TV.
 
 <div class="cta-row">
-<a class="landing-cta" href="https://max-hunts.github.io/ororo-player-tvos/" target="_blank" rel="noopener noreferrer">Visit the project site <span class="cta-arrow">↗</span></a>
-<a class="landing-cta secondary" href="https://github.com/max-hunts/ororo-player-tvos" target="_blank" rel="noopener noreferrer">View Ororo Player on GitHub <span class="cta-arrow">↗</span></a>
+<a class="landing-cta" href="https://github.com/max-hunts/ororo-player-tvos" target="_blank" rel="noopener noreferrer">View Ororo Player on GitHub <span class="cta-arrow">↗</span></a>
+<a class="landing-cta secondary" href="https://max-hunts.github.io/ororo-player-tvos/" target="_blank" rel="noopener noreferrer">Visit the project site <span class="cta-arrow">↗</span></a>
 </div>
 
 ## Where it started
