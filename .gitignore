@@ -38,3 +38,6 @@ dist/
 *.log
 .env
 .env.production
+
+# PolyPaint demo: screenshots captured by demos/polypaint/e2e/shots.cjs
+demos/polypaint/e2e/shots/
