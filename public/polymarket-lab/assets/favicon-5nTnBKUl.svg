@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- slate-950 rounded tile to match the dashboard theme -->
+  <rect width="32" height="32" rx="7" fill="#020617"/>
+  <rect x="0.5" y="0.5" width="31" height="31" rx="6.5" fill="none" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- down candle (rose-500) -->
+  <g stroke="#f43f5e" stroke-width="2" stroke-linecap="round">
+    <line x1="11" y1="8" x2="11" y2="24"/>
+  </g>
+  <rect x="8" y="13" width="6" height="8" rx="1.5" fill="#f43f5e"/>
+
+  <!-- up candle (emerald-400), higher + taller -->
+  <g stroke="#34d399" stroke-width="2" stroke-linecap="round">
+    <line x1="21" y1="5" x2="21" y2="22"/>
+  </g>
+  <rect x="18" y="9" width="6" height="9" rx="1.5" fill="#34d399"/>
+</svg>

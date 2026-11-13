@@ -107,6 +107,12 @@ A self-contained static rebuild of HostHunt's UI (no backend) served at `/hosthu
 - Pages are **recreations** (not the real Vite app): the real app's dashboards are auth-gated + backend-driven, so they're rebuilt with sample data in the landing's design system (coral accent, their card structures). Listing images in `img/` come from the HH repo. Nav links wire the pages together; chip toggles use tiny inline JS.
 - **Logo** = an SVG wordmark (`.brand` in `app.css`, duplicated inline on the landing): lowercase `hosthunt`, "host" in ink + "hunt" in coral, and the **o** in h-o-st is a coral disc holding a white house — the mark is built into the word (no separate icon + gap). Same disc-house is the favicon (`favicon.svg`). Sample personas are fictional (host **Eleanor Reed**, guest **Amelia Clarke**); **don't reintroduce "Maxim"** as a persona here.
 
+### Hosted Polymarket Lab page (`public/polymarket-lab/`)
+A static build of the **About page** from the private `max-hunts/pm-data-aggregator` dashboard (`services/dashboard/frontend/src/pages/About.tsx`), served at `/polymarket-lab/` and linked from the polymarket-lab case study via the `.landing-cta` button. It is a **build output** — don't hand-edit the hashed assets.
+- Built from a patched copy of `About.tsx` (the pm repo itself is untouched): `react-router` `Link`s replaced with plain `<a>`s back to `/work/polymarket-lab/`, plus an amber **"archived snapshot"** banner under the top bar (the page's copy is as of early Aug 2026; the research concluded 22 Aug 2026).
+- Standalone Vite entry that renders only `<About />` (no router, no API calls), `base: "/polymarket-lab/"`, Tailwind 3 with the dashboard's config.
+- Gallery screenshots `src/assets/images/pm-ui-*.png` were captured from the same page at 2x. The dashboard's "What the data actually says" panel is intentionally NOT used as a gallery shot: its paper win rates were later shown to be fill-model artefacts (finding #12).
+
 ## Commands
 - `npm run dev` — dev server (port 4321; also via the preview tool's `astro-dev` launch config).
 - `npm run build` — static build to `dist/`.

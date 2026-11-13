@@ -43,6 +43,8 @@ where a careful operator *should* be able to find an edge. I built a
 self-hosted lab to hunt for one on **Polymarket**, and ran it like a research
 programme: every idea a hypothesis, every hypothesis with a written kill bar.
 
+<a class="landing-cta" href="/polymarket-lab/" target="_blank" rel="noopener noreferrer">Explore the lab's own page <span class="cta-arrow">↗</span></a>
+
 ## The platform
 
 A Python pipeline polled the top 500 markets every five minutes and streamed
