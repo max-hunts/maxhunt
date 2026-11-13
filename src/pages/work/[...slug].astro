@@ -253,6 +253,30 @@ const specs = [
     margin: 0 0 18px;
     max-width: 38em;
   }
+  .copy ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 18px;
+    max-width: 38em;
+  }
+  .copy li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+    margin-bottom: 10px;
+  }
+  .copy li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--color-accent);
+  }
+  .copy li strong {
+    color: var(--color-ink);
+  }
   .copy blockquote {
     border-left: 2px solid var(--color-accent);
     padding-left: 16px;
