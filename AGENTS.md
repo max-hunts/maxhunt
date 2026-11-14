@@ -26,6 +26,8 @@ Per-page `<title>`/description/canonical + Open Graph + Twitter cards in `Base.a
 - **SPA pageviews**: init uses `capture_pageview: false`; we fire `$pageview` manually on `astro:page-load` (fires on initial load AND after every `<ClientRouter />` navigation). Without this, view-transition navigations wouldn't register as pageviews.
 - **Interactions** come free from PostHog **autocapture** (clicks/inputs) — no per-element wiring. Geo (country/region/city) + `$ip` are enriched server-side on ingest; known bots are filtered by PostHog.
 - Gotcha: **headless Chrome (the preview tool) is bot-flagged** by PostHog and may be hidden from default views — verify real events from an actual browser. The snippet loading `eu-assets.i.posthog.com/static/array.js` + a `POST …/i/v0/e/ → 200` confirms ingestion works.
+- **Session replay is ON** (since Nov 2026): the project setting records with all inputs masked, 30-day retention; the snippet no longer sets `disable_session_recording: true` (that line used to override the project setting).
+- **Filtering out Max:** visit any page with `?internal=1` once per browser (`?internal=0` undoes it). It sets `localStorage.mh_internal`; flagged browsers are not session-recorded, and their person gets `$internal_or_test_user: true`, which the project's "Internal / Test users" cohort (id 168188, the test-account filter) excludes. `test_account_filters_default_checked` is on, so new insights exclude internal traffic by default. Authorized URLs: `https://maxhunt.dev` + `https://maxhunt.design`.
 - No consent banner (deliberate choice for a personal portfolio); flip `persistence` to `'memory'` for cookieless if compliance is ever needed.
 
 ### Motion & performance gotchas (important — hard-won)

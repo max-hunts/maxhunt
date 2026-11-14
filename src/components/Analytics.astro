@@ -63,18 +63,34 @@ const { key, host, uiHost } = ANALYTICS;
             (e.__SV = 1));
         })(document, window.posthog || []);
 
+        // Internal traffic switch: visit any page with ?internal=1 once per
+        // browser to mark yourself (?internal=0 undoes it). The flag lives in
+        // localStorage; flagged browsers aren't session-recorded and their person
+        // gets $internal_or_test_user=true, which the PostHog project's
+        // "Internal / Test users" cohort (the test-account filter) excludes.
+        var internal = false;
+        try {
+          var q = new URLSearchParams(location.search).get('internal');
+          if (q === '1') localStorage.setItem('mh_internal', '1');
+          if (q === '0') localStorage.removeItem('mh_internal');
+          internal = localStorage.getItem('mh_internal') === '1';
+        } catch (e) {}
+
         window.posthog.init(key, {
           api_host: host, // first-party Cloudflare proxy (see src/consts.ts)
           ui_host: uiHost, // PostHog's own UI origin (toolbar/links resolve here)
           capture_pageview: false, // we fire $pageview manually (see below)
           capture_pageleave: true, // tab-close / unload leaves
           capture_performance: { web_vitals: true }, // Core Web Vitals (LCP/INP/CLS)
-          // A portfolio doesn't need session replay or in-app surveys — turning
-          // them off stops posthog-recorder.js + surveys.js from loading (~50KB
-          // of JS + its eval). Flip either to false to re-enable.
-          disable_session_recording: true,
+          // Session replay is on (project settings mask all inputs); the
+          // recorder loads asynchronously after init. Flagged internal browsers
+          // skip it. Surveys stay off (surveys.js not loaded).
+          disable_session_recording: internal,
           disable_surveys: true,
           persistence: 'localStorage+cookie',
+          loaded: function (ph) {
+            if (internal) ph.setPersonProperties({ $internal_or_test_user: true });
+          },
         });
 
         // Initial load + every ClientRouter navigation.
