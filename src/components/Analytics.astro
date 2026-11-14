@@ -95,6 +95,9 @@ const { key, host, uiHost } = ANALYTICS;
           disable_session_recording: internal,
           disable_surveys: true,
           persistence: 'localStorage+cookie',
+          // Browsers that send Do Not Track are never captured. Visitors can
+          // also opt out on /privacy (opt_out_capturing, remembered per browser).
+          respect_dnt: true,
           loaded: function (ph) {
             if (internal) ph.setPersonProperties({ $internal_or_test_user: true });
           },

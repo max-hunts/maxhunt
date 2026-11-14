@@ -1,0 +1,261 @@
+---
+// Privacy notice + analytics opt-out. Deliberately no cookie banner (see the
+// Analytics section of CLAUDE.md): this page is the transparency notice, and
+// the opt-out button is the "simple means of objecting" for analytics.
+import Base from '../layouts/Base.astro';
+import { SITE } from '../consts';
+
+const updated = '14 November 2026';
+---
+
+<Base
+  title="Privacy — Max Hunt"
+  description="What maxhunt.dev collects, why, and how to opt out."
+>
+  <main class="wrap">
+    <div class="flex justify-between items-center py-3 border-b border-line">
+      <a href="/" class="mono hover:text-accent transition-colors">← INDEX</a>
+      <span class="mono">PRIVACY</span>
+    </div>
+
+    <header class="pt-10 pb-6">
+      <p class="mono text-accent">// LAST UPDATED {updated.toUpperCase()}</p>
+      <h1 class="text-[clamp(40px,9vw,72px)] font-medium leading-[0.95] tracking-tight mt-2.5 m-0">
+        Privacy
+      </h1>
+      <p class="text-[17px] text-ink-soft mt-3 max-w-[30em] leading-snug">
+        This is a personal portfolio. I use analytics to see which work people look at and to
+        catch broken pages. There are no ads, nothing is sold, and nothing is used to track you
+        across other sites.
+      </p>
+    </header>
+
+    <div class="privacy border-t border-line pt-8">
+      <section>
+        <h2>Opt out</h2>
+        <p>
+          One click turns off analytics and session recording in this browser. It's remembered
+          until you clear this site's storage. If your browser sends Do Not Track, nothing is
+          collected in the first place.
+        </p>
+        <div class="optout" data-optout>
+          <button type="button" data-optout-btn disabled>Checking…</button>
+          <span class="mono" data-optout-status></span>
+        </div>
+      </section>
+
+      <section>
+        <h2>What is collected</h2>
+        <ul>
+          <li>
+            <strong>Usage analytics:</strong> pages viewed, clicks, how you arrived (the referring
+            site), browser, device type, screen size and page-load performance.
+          </li>
+          <li>
+            <strong>Approximate location:</strong> country and city, worked out from your IP
+            address. The IP address itself is discarded and never stored.
+          </li>
+          <li>
+            <strong>Session recordings:</strong> a replay of how the page was used (scrolling,
+            mouse movement, clicks), so I can see where the layout gets in the way. Anything typed
+            into a field is masked. Recordings are deleted after 30 days.
+          </li>
+        </ul>
+        <p>
+          This is tied to a random ID stored in this browser, not to your name or email. I don't
+          try to work out who you are.
+        </p>
+      </section>
+
+      <section>
+        <h2>Cookies and storage</h2>
+        <p>
+          Analytics keeps that random ID in a first-party cookie and in local storage
+          (<code>ph_…_posthog</code>). Nothing is set by third-party domains.
+        </p>
+      </section>
+
+      <section>
+        <h2>Who handles it</h2>
+        <ul>
+          <li>
+            <strong>PostHog</strong> stores the analytics in its EU cloud, on my behalf. Requests go
+            through my own domain first.
+          </li>
+          <li>
+            <strong>GitHub Pages and Cloudflare</strong> serve the site, so they see your IP
+            address when delivering pages, as every web host does.
+          </li>
+        </ul>
+        <p>Nobody else receives it.</p>
+      </section>
+
+      <section>
+        <h2>Your rights</h2>
+        <p>
+          You can ask what I hold about you, or ask me to delete it, by emailing{' '}
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Without a name to go on, the quickest
+          route is to send the date you visited and your rough location. If you're unhappy with
+          the answer, you can complain to the UK Information Commissioner's Office
+          (<a href="https://ico.org.uk/make-a-complaint/" target="_blank" rel="noopener noreferrer"
+            >ico.org.uk</a
+          >).
+        </p>
+      </section>
+    </div>
+  </main>
+</Base>
+
+<script>
+  // Runs on the first load and after every ClientRouter navigation.
+  type PH = {
+    __loaded?: boolean;
+    has_opted_out_capturing: () => boolean;
+    opt_out_capturing: () => void;
+    opt_in_capturing: () => void;
+    stopSessionRecording?: () => void;
+  };
+
+  function setup() {
+    const root = document.querySelector<HTMLElement>('[data-optout]');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    const btn = root.querySelector<HTMLButtonElement>('[data-optout-btn]')!;
+    const status = root.querySelector<HTMLElement>('[data-optout-status]')!;
+
+    const render = (ph: PH) => {
+      const out = ph.has_opted_out_capturing();
+      btn.disabled = false;
+      btn.textContent = out ? 'Turn analytics back on' : 'Opt out of analytics';
+      btn.classList.toggle('secondary', out);
+      status.textContent = out
+        ? 'Analytics is off in this browser.'
+        : 'Analytics is on in this browser.';
+    };
+
+    btn.addEventListener('click', () => {
+      const ph = (window as unknown as { posthog?: PH }).posthog;
+      if (!ph?.__loaded) return;
+      if (ph.has_opted_out_capturing()) {
+        ph.opt_in_capturing();
+      } else {
+        ph.stopSessionRecording?.();
+        ph.opt_out_capturing();
+      }
+      render(ph);
+    });
+
+    // The SDK loads asynchronously; wait for it. If it never arrives (an
+    // ad-blocker or Do Not Track), there is nothing to opt out of.
+    let tries = 0;
+    const wait = () => {
+      const ph = (window as unknown as { posthog?: PH }).posthog;
+      if (ph?.__loaded) return render(ph);
+      if (++tries > 40) {
+        btn.hidden = true;
+        status.textContent = 'Analytics is not running in this browser.';
+        return;
+      }
+      setTimeout(wait, 150);
+    };
+    wait();
+  }
+
+  document.addEventListener('astro:page-load', setup);
+</script>
+
+<style>
+  .privacy section {
+    margin-bottom: 36px;
+  }
+  .privacy h2 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-accent);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+  .privacy p,
+  .privacy li {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+  }
+  .privacy p {
+    margin: 0 0 18px;
+    max-width: 38em;
+  }
+  .privacy ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 18px;
+    max-width: 38em;
+  }
+  .privacy li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
+  }
+  .privacy li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+  }
+  .privacy strong {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+  .privacy a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+  .privacy code {
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-ink);
+  }
+  .optout {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+  .optout button {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-accent-ink);
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      transform 0.15s ease;
+  }
+  .optout button:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-accent) 90%, white);
+    transform: translateY(-2px);
+  }
+  .optout button.secondary {
+    color: var(--color-accent);
+    background: transparent;
+  }
+  .optout button.secondary:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+  .optout button[hidden] {
+    display: none;
+  }
+  .optout button:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+</style>
