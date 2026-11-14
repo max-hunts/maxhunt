@@ -63,17 +63,24 @@ const { key, host, uiHost } = ANALYTICS;
             (e.__SV = 1));
         })(document, window.posthog || []);
 
-        // Internal traffic switch: visit any page with ?internal=1 once per
-        // browser to mark yourself (?internal=0 undoes it). The flag lives in
-        // localStorage; flagged browsers aren't session-recorded and their person
-        // gets $internal_or_test_user=true, which the PostHog project's
+        // Internal traffic: a browser counts as the owner's when it has the
+        // mh_internal=1 cookie, which Board (board.maxhunt.dev) sets on the
+        // parent domain at sign-in, or when it was flagged by visiting any page
+        // with ?internal=1 (?internal=0 clears both the flag and the cookie in
+        // this browser). Internal browsers aren't session-recorded and their
+        // person gets $internal_or_test_user=true, which the PostHog project's
         // "Internal / Test users" cohort (the test-account filter) excludes.
         var internal = false;
         try {
           var q = new URLSearchParams(location.search).get('internal');
           if (q === '1') localStorage.setItem('mh_internal', '1');
-          if (q === '0') localStorage.removeItem('mh_internal');
-          internal = localStorage.getItem('mh_internal') === '1';
+          if (q === '0') {
+            localStorage.removeItem('mh_internal');
+            document.cookie = 'mh_internal=; Max-Age=0; Path=/; Domain=' + location.hostname;
+          }
+          internal =
+            localStorage.getItem('mh_internal') === '1' ||
+            /(?:^|;\s*)mh_internal=1(?:;|$)/.test(document.cookie);
         } catch (e) {}
 
         window.posthog.init(key, {
