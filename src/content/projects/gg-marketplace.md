@@ -44,7 +44,7 @@ gallery:
   - src: "/images/gg-listings.png"
     caption: "Your listings, filtered by status: on sale, in review, off sale, sold"
 featured: true
-isNew: true
+isNew: false
 order: 16
 ---
 
