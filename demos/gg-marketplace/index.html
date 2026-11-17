@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>GG Marketplace demo: a 2020 peer-to-peer marketplace, rebuilt to run in your browser</title>
+    <meta name="description" content="Concept demo of GG Marketplace (2020): list an item, approve it as the admin, request it as a buyer and read the email as the seller. The original Express and Firebase API is ported to run in the page. No backend, no real accounts." />
+    <meta name="theme-color" content="#f6f4ef" />
+    <meta name="color-scheme" content="light" />
+    <link rel="canonical" href="https://maxhunt.dev/gg-demo/" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GG Marketplace demo" />
+    <meta property="og:description" content="A 2020 peer-to-peer marketplace, rebuilt to run entirely in your browser. Play the buyer, the seller and the admin." />
+    <meta property="og:url" content="https://maxhunt.dev/gg-demo/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="GG Marketplace demo" />
+    <meta name="twitter:description" content="A 2020 peer-to-peer marketplace, rebuilt to run entirely in your browser. Play the buyer, the seller and the admin." />
+    <style>
+      html { background: #f6f4ef; }
+      body { margin: 0; }
+      #root:empty::before { content: "Loading GG Marketplace\2026"; position: fixed; inset: 0; display: grid; place-items: center; color: #7b808a; font: 600 13px system-ui, sans-serif; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>GG Marketplace is an interactive demo and needs JavaScript. Read about it at maxhunt.dev/work/gg-marketplace/.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -41,3 +41,6 @@ dist/
 
 # PolyPaint demo: screenshots captured by demos/polypaint/e2e/shots.cjs
 demos/polypaint/e2e/shots/
+
+# GG Marketplace demo: screenshots captured by demos/gg-marketplace/e2e/shots.cjs and scripts/before-shots.ts
+demos/gg-marketplace/e2e/shots/

@@ -1,0 +1,31 @@
+{
+  "name": "gg-marketplace-demo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Client-side GG Marketplace demo: the 2020 Express + Firebase API ported to an in-browser backend, with a new UI. Builds into ../../public/gg-demo.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "before-shots": "tsx scripts/before-shots.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/nunito": "^5.2.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "ejs": "^7.0.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8"
+  }
+}

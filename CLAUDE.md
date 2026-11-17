@@ -78,8 +78,10 @@ src/
   styles/global.css           # Tailwind import + @theme tokens + base styles + grid/glow + transitions
 demos/
   polypaint/                  # SOURCE of the PolyPaint demo (Vite app, own package.json); builds into public/polypaint-demo
+  gg-marketplace/             # SOURCE of the GG Marketplace demo (Vite app, own package.json); builds into public/gg-demo
 public/
   polypaint-demo/             # committed build output of demos/polypaint (do not hand-edit)
+  gg-demo/                    # committed build output of demos/gg-marketplace (do not hand-edit)
   guibe-sq/                   # 200-frame render sequence for the guibe page (0001..0200.jpg)
   shiba/                      # Shiba sprite frames (dog-*.png, heart, bone)
   logo.png  og.jpg            # on-page logo + social card image (static, unprocessed)
@@ -101,6 +103,8 @@ Frontmatter fields: `title, tagline, category (software|product|engineering), ty
 Current projects: `hosthunt` + `innovaby` (real content written from the source repos; their `isNew` tag was dropped in Nov 2026), plus migrated legacy: `power, gizmo, clean, wirelexx` (`fea` and `sportable` were removed from the site in Nov 2026). `order` controls index sorting.
 
 - **PolyPaint** (slug `/work/polypaint`, `order: 13`, type `WEB3`, year 2022): the 2022 million-pixel NFT canvas, with a 2026 client-side demo (see "Hosted PolyPaint demo" below). Hero and gallery are real captures of the demo (`src/assets/images/polypaint-*.png`, all 2880x1800); captions say the chain is simulated and the art is seeded.
+
+- **GG Marketplace** (slug `/work/gg-marketplace`, `order: 16`, type `WEB`, year 2020): the 2020 peer-to-peer marketplace prototype (public repo `max-hunts/gg-marketplace`), with a 2026 client-side demo (see "Hosted GG Marketplace demo" below). Hero and the `gg-*.png` gallery shots are captures of the demo; the `gg-before-*.png` shots are the original 2020 templates (all 2880x1800). The case study states no motive or backstory for the 2020 project because the repo records none: add that only from Max.
 
 - **hostHunt** (`HostHunt`, slug `/work/hosthunt`): reverse-marketplace for stays — guests post requests, hosts bid. Content distilled from the private `max-hunts/HH` repo (React/Vite/Firebase/Stripe app). Hero/gallery from the real app banner + screenshots of the hosted landing.
 - **Innovaby** (slug `/work/innovaby`): smart-crib **venture** (the company); its product/technology is **SleepSafe** (Pi CM4 crib, AWS coordinator, Telegram + Google Meet parent loop, nanny station). From the private `max-hunts/Innovaby-MVP` repo. Hero is Max's AI-generated dark **SleepSafe feature-grid** (`src/assets/images/innovaby-sleepsafe.png`, `heroContain: true` so the whole grid shows uncropped); the hand-built schematic (`innovaby-system.png`, rendered from `scratchpad/innovaby-diagram.html` via headless Chrome) is the second gallery shot.
@@ -150,11 +154,35 @@ A fully client-side rebuild of polypaint.io (2022, public repo `max-hunts/POLYPA
   - Never copy keys or RPC URLs from the 2022 repo (its `server/index.js` hard-codes a node URL containing an API key).
   - The case study does not quote the 2022 mainnet contract address: it could not be checked on Polygonscan from the cloud sandbox. Verify it before adding it.
 
+### Hosted GG Marketplace demo (`public/gg-demo/`, source in `demos/gg-marketplace/`)
+A fully client-side rebuild of GG Marketplace (2020, public repo `max-hunts/gg-marketplace`: Express + EJS + Firebase Auth / Realtime Database / Storage + nodemailer), served at `/gg-demo/` and linked from the gg-marketplace case study via the `.landing-cta` button. Visitors pick a demo account and play the whole loop: list an item, approve it as the admin, request it as a buyer, read the email as the seller. **No Firebase, no server, no real email.** The selling point: the **2020 API is ported, not reinvented** (same routes, request and response shapes, error strings), and the UI is new.
+
+- **Source is committed** in `demos/gg-marketplace/` (Vite 8 + React 19 + TypeScript 7, its own `package.json` and `node_modules`; the root `tsconfig.json` excludes `demos`). **The build output is committed** in `public/gg-demo/` (CI builds only the Astro site). Rebuild with `npm run build:gg` from the root (`tsc --noEmit && vite build`, empties and rewrites the folder). Don't hand-edit the hashed assets. Base path is `/gg-demo/` (override with `GG_BASE`).
+- Dev: `cd demos/gg-marketplace && npm install && npm run dev` (port 4340). `npm test` runs the 19 API tests (node:test via tsx). `npx vite preview` serves the production build on 4341.
+- **Layers:**
+  1. `src/backend/` **the ported server**, free of DOM and React so it runs in Node tests. `server.ts` is the port of the original `server.js`: the page routes (`home`, `search`, `product`, `myProducts`, `myProduct`, `adminReview`, `userProfile`) return exactly what the EJS templates were given, and the eleven POST endpoints answer `{ success, error }`. `db.ts` is the Realtime Database stand-in (one JSON tree, Firebase-style push ids, a change counter). `mail.ts` is the nodemailer stand-in (an outbox; each account's inbox is the mail addressed to it). `seed.ts` holds the fictional people, the 25 listings and the four sign-in accounts.
+  2. `src/app.ts` **page singletons**: the backend on `localStorage`, the session (which demo account is signed in, read mail, guide progress), toasts, the hash router, and picture resolution (the Storage stand-in). Reads are synchronous calls into the server; writes go through `call()`, which adds a 260 to 500 ms delay so "Sending..." states are visible.
+  3. `src/ui/` **the new interface**: `Shell.tsx` (demo bar, header, account switcher, inbox drawer, guide bar, toasts), `pages.tsx` (home, search, listing, profile), `seller.tsx` (sell form, my listings, manage, edit, admin queue, registration).
+  4. `src/art/products.ts` **illustrations**: 28 flat SVG pictures as plain strings (25 seeded listings plus 3 samples offered on the sell form), plus initials avatars. The original listings and photos lived in Firebase and are gone, so everything visible is made for the demo.
+- **Three deliberate differences from the 2020 server** (documented at the top of `server.ts`, each with a test, and described in the case study): `new-product-api` takes the owner from the token instead of the request body; `update-product-api` writes only the five editable fields (the original wrote anything, so a seller could set `status: "on-sale"` and skip review); a bad token answers "invalid auth token" instead of throwing. Everything else is kept, including quirks: stock is never decremented, the admin is one hard-coded uid, `price` and `stock` are strings, every listing has `id: 999`.
+- **State.** Keys under `gg-demo:v1:` in `localStorage`: `db` (the whole tree, tagged with `SEED_ID`), `mail`, `uploads` (photos shrunk to 720 px JPEG data URLs), `session`. Bump `SEED_ID` in `seed.ts` when the seed changes: saved state from an older seed is discarded. Seed listing keys are push ids minted from 2020 timestamps, so a visitor's listings always sort after them.
+- **The guide** is a slim bar docked to the bottom (`Guide` in `Shell.tsx`), not a floating panel: a floating one covered page content (the e2e run caught it sitting on a button). It derives its four steps from state (the visitor's listing key, that listing's status, the request mail id, whether it was read) and shows a hint instead of a jump button when the visitor is already the right account on the right page.
+- **Checks** live in `demos/gg-marketplace/e2e/` and need `playwright` resolvable: `flow.cjs` (48 desktop checks through the UI: browse, search, the four-step loop, manage, ownership 404s, registration, photo upload, reload persistence, reset), `mobile-flow.cjs` (11 phone checks at 390x844), `shots.cjs` (re-captures the case-study screenshots at 1440x900 @2x into `e2e/shots/`). They use `data-testid` attributes and `window.__gg` (`backend`, `server`, `session`, `ui`), a deliberate debug handle.
+- **Before shots** (`gg-before-*.png`): `GG_REPO=/path/to/gg-marketplace npx tsx scripts/before-shots.ts` renders the **original, untouched** EJS templates, CSS, fonts and client scripts from a checkout of the 2020 repo, feeding them the ported server's page data, with the Firebase SDK stubbed in the page (auth reports Tom as signed in, Storage resolves to the demo's illustrations). So they are the real 2020 UI with 2026 seed data, and captions say so. The repo's committed `js/fAuth.js` and `js/fdb.js` are empty (the minified builds were never checked in), so the script serves the `.src.js` files in their place.
+- Gotchas:
+  - Everyone in the demo is fictional, with `@example.com` addresses. The admin persona is "Robin Hale"; don't reintroduce the real 2020 admin uid or the `dev@dev.dev` address into the demo.
+  - Prices stay in pounds and cities stay British: the 2020 footer reads "GG Sales UK". Demo UI copy and the case study use American spelling.
+  - The font is Nunito (the 2020 CSS used it too), latin subset only, loaded by a hand-written `@font-face` in `app.css` because the fontsource variable package has no per-subset stylesheet.
+  - Motion follows the site rule: only `transform` and `opacity` are transitioned or animated.
+  - Measured (production build): about 140 KB total transfer (JS 92 KB, CSS 6 KB, font 39 KB; gzip sizes for the first two).
+  - The original Firebase project could not be reached from the cloud sandbox (its hosts are blocked by the network policy), so nothing here claims the 2020 site is or is not still live.
+
 ## Commands
 - `npm run dev` — dev server (port 4321; also via the preview tool's `astro-dev` launch config).
 - `npm run build` — static build to `dist/`.
 - `npm run preview` — serve the built `dist/`.
 - `npm run build:polypaint`: rebuild the PolyPaint demo into `public/polypaint-demo/` (run `npm install` in `demos/polypaint` first).
+- `npm run build:gg`: rebuild the GG Marketplace demo into `public/gg-demo/` (run `npm install` in `demos/gg-marketplace` first).
 - `npm run seed:polypaint`: regenerate the demo's seeded canvas (`demos/polypaint/public/seed.bin`), then rebuild the demo.
 
 ## Deployment
