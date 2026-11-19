@@ -5,7 +5,7 @@ Personal portfolio for **Max Hunt** — design & product engineer turned full-ti
 ## Stack
 
 - **Astro 7** (static output / SSG) — fully-rendered HTML per route for SEO, served as static files. No server runtime, so no cold boots and zero hosting cost on GitHub Pages. (Upgraded 5→7; needs Node ≥22.12.)
-- **React 19** islands for interactivity (`@astrojs/react` v6).
+- **React 19** islands for interactivity (`@astrojs/react` v7).
 - **Tailwind CSS 4** via `@tailwindcss/vite` (theme tokens in `src/styles/global.css`).
 - **Astro View Transitions** (`<ClientRouter />` in `Base.astro`) for smooth cross-page fades; `Reveal.astro` re-inits its observer on `astro:page-load`.
 - **@astrojs/sitemap** for `sitemap-index.xml`; `public/robots.txt` points to it.
@@ -121,7 +121,7 @@ GitHub Actions (`.github/workflows/deploy.yml`) builds and deploys `dist/` on pu
 ## Legacy (`_legacy/`)
 The previous site is archived for reference (not served, not built):
 - `index.html` — old Webflow export (jQuery + Bootstrap 4 + GSAP/ScrollMagic + Jssor). Source of truth for migrated project copy.
-- `comingsoon_react_src/` + `docs/` — the prior Vite "coming soon" page (cursor-following Shiba) and its build output.
+- `docs/` — build output of the prior Vite "coming soon" page (cursor-following Shiba). Its source (`comingsoon_react_src/`) was deleted in Nov 2026 to clear Dependabot alerts; git history has it.
 - `guibe-sq/` (200-frame scroll sequence), `encoded_MAX.mp4`, old PDFs, `css/`, `js/`.
 - Note: legacy HTML image refs are broken in the archive because `Images/` moved to `public/images/`; git history has the working version.
 
