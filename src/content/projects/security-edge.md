@@ -1,5 +1,5 @@
 ---
-title: Adding a Security Edge Without Ballooning Our Infrastructure
+title: Optimizing Infrastructure Security at the Edge
 tagline: Figuring out the best API gateway for our use case, and sending it to production.
 category: software
 type: ARTICLE
