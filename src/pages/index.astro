@@ -16,7 +16,9 @@ const projects: ProjectCard[] = await Promise.all(
     const meta = resolveImage(p.data.hero);
     return {
       slug: p.id,
-      href: `/work/${p.id}`,
+      // A link-only entry points straight at the external URL (new tab).
+      href: p.data.link ?? `/work/${p.id}`,
+      externalHost: p.data.link ? new URL(p.data.link).hostname.replace(/^www\./, '') : null,
       title: p.data.title,
       tagline: p.data.tagline,
       category: p.data.category,
@@ -34,6 +36,7 @@ const projects: ProjectCard[] = await Promise.all(
 projects.unshift({
   slug: 'private-work',
   href: SITE.privateWork,
+  externalHost: null,
   title: 'Private work',
   tagline: 'Four project records. Password required.',
   category: 'private',

@@ -3,6 +3,9 @@ import { useMemo, useRef, useState } from 'react';
 export type ProjectCard = {
   slug: string;
   href: string;
+  // Set for link-only entries (an article published elsewhere): `href` is then
+  // an external URL that opens in a new tab, and this is its bare hostname.
+  externalHost: string | null;
   title: string;
   tagline: string;
   category: 'software' | 'product' | 'engineering' | 'private';
@@ -38,6 +41,21 @@ function LockIcon({ className }: { className: string }) {
     </svg>
   );
 }
+
+function ArticleIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6 3h8l4 4v14H6z" />
+      <path d="M14 3v4h4" />
+      <path d="M9 12h6" />
+      <path d="M9 16h6" />
+    </svg>
+  );
+}
+
+// New-tab attributes for link-only entries; nothing for internal pages.
+const newTab = (p?: ProjectCard) =>
+  p?.externalHost ? { target: '_blank', rel: 'noopener noreferrer' } : {};
 
 export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) {
   const [filter, setFilter] = useState<Filter>('all');
@@ -94,6 +112,7 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
             <a
               key={p.slug}
               href={p.href}
+              {...newTab(p)}
               onMouseEnter={() => previewHover(p.slug)}
               onFocus={() => setActiveSlug(p.slug)}
               className={
@@ -111,10 +130,13 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
                 )}
               </span>
               <div>
-                <p className="text-[17px] font-medium flex items-center gap-2 m-0">
+                {/* The badge is inline (not a flex sibling) so that it follows the
+                    last word when a long title wraps, instead of sitting beside
+                    the whole block and squeezing it. */}
+                <p className="text-[17px] font-medium m-0">
                   {p.title}
                   {p.isNew && (
-                    <span className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-accent text-accent-ink tracking-wider">
+                    <span className="inline-block align-middle ml-2 -mt-0.5 font-mono text-[9px] px-1.5 py-0.5 rounded bg-accent text-accent-ink tracking-wider">
                       NEW
                     </span>
                   )}
@@ -126,8 +148,11 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
                   {p.type}
                 </span>
                 <span className="text-accent text-[17px] opacity-30 group-hover:opacity-100 transition-opacity">
-                  →
+                  {p.externalHost ? '↗' : '→'}
                 </span>
+                {p.externalHost && (
+                  <span className="sr-only">(opens {p.externalHost} in a new tab)</span>
+                )}
               </div>
             </a>
           ))}
@@ -144,7 +169,15 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
         >
           {projects.map((p) => {
             const on = p.slug === active?.slug;
-            return p.category === 'private' ? (
+            // Icon tile: the private collection, and link-only entries that
+            // have no hero image of their own.
+            const tile =
+              p.category === 'private'
+                ? { Icon: LockIcon, label: 'PASSWORD PROTECTED' }
+                : p.externalHost && !p.hero
+                  ? { Icon: ArticleIcon, label: `${p.type} · ${p.externalHost}`.toUpperCase() }
+                  : null;
+            return tile ? (
               <div
                 key={p.slug}
                 aria-hidden="true"
@@ -155,10 +188,10 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
                 }}
               >
                 <div className="flex h-24 w-24 items-center justify-center rounded-[22px] border border-accent/25 bg-accent/5">
-                  <LockIcon className="h-12 w-12 text-accent" />
+                  <tile.Icon className="h-12 w-12 text-accent" />
                 </div>
                 <span className="font-mono text-[10px] tracking-[0.15em] text-muted">
-                  PASSWORD PROTECTED
+                  {tile.label}
                 </span>
               </div>
             ) : p.hero ? (
@@ -203,9 +236,14 @@ export default function ProjectIndex({ projects }: { projects: ProjectCard[] }) 
         </p>
         <a
           href={active?.href}
+          {...newTab(active)}
           className="inline-block font-mono text-[11px] px-3 py-2 rounded-lg bg-accent text-accent-ink mt-3"
         >
-          {active?.category === 'private' ? 'view private work →' : 'open case study →'}
+          {active?.category === 'private'
+            ? 'view private work →'
+            : active?.externalHost
+              ? `read on ${active.externalHost} ↗`
+              : 'open case study →'}
         </a>
       </div>
     </div>

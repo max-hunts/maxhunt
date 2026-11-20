@@ -9,7 +9,9 @@ import { optimize, resolveImage } from '../../lib/images';
 import { normalizeSkills } from '../../lib/skills';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  // Link-only entries (`link` set) live on another site: no page, and they are
+  // left out of the numbering and the "next project" chain.
+  const projects = await getCollection('projects', ({ data }) => !data.draft && !data.link);
   const sorted = projects.sort((a, b) => a.data.order - b.data.order);
   return sorted.map((project, i) => ({
     params: { slug: project.id },

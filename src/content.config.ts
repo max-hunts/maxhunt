@@ -30,6 +30,10 @@ const projects = defineCollection({
       )
       .default([]),
     status: z.string().optional(),
+    // External URL for a link-only entry (e.g. an article published elsewhere).
+    // When set, the index row opens it in a new tab and NO case-study page is
+    // built for the entry, so its markdown body is unused.
+    link: z.string().url().optional(),
     // Public-path images (served from /public/images).
     hero: z.string().optional(),
     // True when the hero is a product shot on a white/light background; the
